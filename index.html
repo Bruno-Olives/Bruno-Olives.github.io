@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Razões porque te amo 💕</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        padding: 20px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+        color: white;
+      }
+
+      .header h1 {
+        font-size: 2em;
+        margin-bottom: 10px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .counter {
+        font-size: 1em;
+        opacity: 0.9;
+      }
+
+      .card-container {
+        position: relative;
+        width: 100%;
+        max-width: 350px;
+        height: 450px;
+        perspective: 1000px;
+      }
+
+      .card {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+        text-align: center;
+        cursor: grab;
+        user-select: none;
+        transition:
+          transform 0.3s ease,
+          box-shadow 0.3s ease;
+      }
+
+      .card:active {
+        cursor: grabbing;
+      }
+
+      .card.swiping {
+        transition: none;
+      }
+
+      .card-number {
+        position: absolute;
+        top: 20px;
+        right: 25px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 0.9em;
+      }
+
+      .card-emoji {
+        font-size: 4em;
+        margin-bottom: 20px;
+      }
+
+      .card-text {
+        font-size: 1.5em;
+        color: #333;
+        line-height: 1.4;
+        font-weight: 500;
+      }
+
+      .controls {
+        margin-top: 30px;
+        display: flex;
+        gap: 20px;
+      }
+
+      .btn {
+        background: white;
+        border: none;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        font-size: 1.5em;
+        cursor: pointer;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 7px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn:active {
+        transform: scale(0.95);
+      }
+
+      .btn-dislike {
+        color: #ff6b6b;
+      }
+
+      .btn-like {
+        color: #51cf66;
+      }
+
+      .hearts {
+        position: fixed;
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      .heart {
+        position: absolute;
+        font-size: 2em;
+        animation: float 3s ease-in forwards;
+        opacity: 0;
+      }
+
+      @keyframes float {
+        0% {
+          opacity: 1;
+          transform: translateY(0) scale(0);
+        }
+        50% {
+          opacity: 1;
+          transform: translateY(-100px) scale(1);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(-200px) scale(1.2);
+        }
+      }
+
+      .end-message {
+        display: none;
+        text-align: center;
+        color: white;
+        padding: 40px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        backdrop-filter: blur(10px);
+        max-width: 350px;
+      }
+
+      .end-message h2 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+      }
+
+      .end-message p {
+        font-size: 1.2em;
+        line-height: 1.6;
+      }
+
+      .restart-btn {
+        margin-top: 20px;
+        padding: 15px 30px;
+        background: white;
+        color: #764ba2;
+        border: none;
+        border-radius: 30px;
+        font-size: 1.1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .restart-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="hearts" id="hearts"></div>
+
+    <div class="header">
+      <h1>Razões porque te amo 💕</h1>
+      <div class="counter" id="counter">1 / 15</div>
+    </div>
+
+    <div class="card-container" id="cardContainer">
+      <!-- Cards will be generated here -->
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-dislike" id="dislikeBtn">❌</button>
+      <button class="btn btn-like" id="likeBtn">💖</button>
+    </div>
+
+    <div class="end-message" id="endMessage">
+      <h2>💝</h2>
+      <p>
+        Estas são apenas algumas das infinitas razões (a sério existem razões
+        pra caralho 🙄) pelas quais te amo!
+      </p>
+      <button class="restart-btn" id="restartBtn">Ver novamente</button>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
