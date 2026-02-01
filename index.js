@@ -148,7 +148,8 @@ function createHearts() {
       const heart = document.createElement("div");
       heart.className = "heart";
       heart.textContent = "💖";
-      heart.style.left = Math.random() * window.innerWidth + "px";
+      heart.style.left =
+        window.innerWidth / 6 - 20 + (Math.random() - 0.5) * 100 + "px";
       heart.style.top = window.innerHeight / 2 + "px";
       heartsContainer.appendChild(heart);
 
